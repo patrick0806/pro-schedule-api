@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
 import { Business } from "./business.entity";
 import { Plan } from "./plan.entity";
 import { SubscriptionStatus } from "@shared/enums/subscriptionStatus.enum";
@@ -8,7 +8,7 @@ export class Subscription {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @Column()
+    @Column({ type: 'enum', enum: SubscriptionStatus })
     status: SubscriptionStatus;
 
     @Column({ name: 'renews_at' })
@@ -25,8 +25,8 @@ export class Subscription {
 
     @OneToOne(() => Business, business => business.subscription)
     @JoinColumn()
-    business: Business;
+    business: Relation<Business>;
 
     @ManyToOne(() => Plan, Plan => Plan.subscriptions)
-    plan: Plan;
+    plan: Relation<Plan>;
 }
