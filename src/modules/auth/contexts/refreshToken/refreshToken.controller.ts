@@ -8,7 +8,7 @@ import { RefreshTokenService } from './refreshToken.service';
 
 @Public()
 @ApiTags(API_TAGS.AUTH)
-@Controller({ version: '1', path: 'login' })
+@Controller({ version: '1', path: 'refresh' })
 export class LoginController {
     constructor(private readonly service: RefreshTokenService) { }
 

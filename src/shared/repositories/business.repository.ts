@@ -28,6 +28,14 @@ export class BusinessRepository {
         })
     }
 
+    async findByPhoneNumber(phoneNumber: string): Promise<Business> {
+        return this.repository.findOne({
+            where: {
+                whatsapp: phoneNumber,
+            },
+        })
+    }
+
     async list(page: number, size: number): Promise<IPageResponse<Business>> {
         const [results, totalResults] = await this.repository.findAndCount({
             skip: (page - 1) * size,

@@ -17,4 +17,7 @@ export default () => ({
     user: process.env.DATABASE_USER || 'postgres',
     password: process.env.DATABASE_PASSWORD || 'postgres',
   },
+  mail: {
+    resend: process.env.RESEND_API_KEY || "",
+  },
 });
