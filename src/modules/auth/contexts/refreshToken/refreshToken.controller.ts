@@ -9,7 +9,7 @@ import { RefreshTokenService } from './refreshToken.service';
 @Public()
 @ApiTags(API_TAGS.AUTH)
 @Controller({ version: '1', path: 'refresh' })
-export class LoginController {
+export class RefreshTokenController {
     constructor(private readonly service: RefreshTokenService) { }
 
     @ApiOperation({ summary: 'Refresh Token' })
