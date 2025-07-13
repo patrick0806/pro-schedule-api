@@ -5,9 +5,12 @@ import { JWTAuthGuard, RolesGuard } from '@shared/guards';
 
 import { AuthModule } from '@modules/auth/auth.module';
 import { HealthModule } from '@modules/health/health.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { databaseOptions } from '@config/typeorm/datasource';
 
 @Module({
   imports: [
+    TypeOrmModule.forRoot({ ...databaseOptions }),
     HealthModule,
     AuthModule,
     RouterModule.register([
@@ -33,4 +36,4 @@ import { HealthModule } from '@modules/health/health.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

@@ -1,22 +1,32 @@
-# Reference API
+# Pro Schedule
 
-# Project status: Completed (for now)
+## Project status: In Development
 
-This is a skeleton API so we can start new projects.
-Quickly focus only on implementing business rules
+This api focus on schedule services from customers to our users
 
 ## How to run
 
-This project uses [NestJS](https://docs.nestjs.com/).
+### Create a database 
 
-So it is recommended that you know a little about this framework
-
-To run this project in dev mode you need to follow these steps
+```bash
+docker run --name pro-schedule-postgres \
+    -p 5432:5432 \
+    -e POSTGRES_DB=referer \
+    -e POSTGRES_USER=postgres \
+    -e POSTGRES_PASSWORD=123 \
+    -d postgres:16.2-alpine
+```
 
 ### Install dependencies
 
 ```bash
  npm installation
+```
+
+### Rnn migrations
+
+```bash
+npm run migration:run
 ```
 
 ### Run project
