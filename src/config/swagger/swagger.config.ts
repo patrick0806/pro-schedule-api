@@ -6,7 +6,7 @@ import { defaultResponses } from './defaultResponses.swagger';
 
 export class SwaggerConfig {
   static documentation = new DocumentBuilder()
-    .setTitle('Referer api')
+    .setTitle('Pro Schedule api')
     .setVersion('1.0')
     .setContact(
       'Patrick da Silva Nicezi',
