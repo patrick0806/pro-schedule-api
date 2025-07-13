@@ -1,2 +1,2 @@
 export { LogBuilderService } from './LogBuilder.service';
-export { EmailService } from './email.service';
+export { EmailService } from './mail/email.service';
