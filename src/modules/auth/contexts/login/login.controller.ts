@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import type { FastifyReply } from 'fastify';
 
-import { API_TAGS } from '@shared/constants';
+import { API_TAGS, HEADERS } from '@shared/constants';
 import { Public } from '@shared/decorators';
 
 import { LoginRequestDTO } from './dtos/request.dto';
@@ -11,11 +12,14 @@ import { LoginService } from './login.service';
 @ApiTags(API_TAGS.AUTH)
 @Controller({ version: '1', path: 'login' })
 export class LoginController {
-  constructor(private readonly loginService: LoginService) {}
+  constructor(private readonly loginService: LoginService) { }
 
   @ApiOperation({ summary: 'Login' })
   @Post()
-  async handle(@Body() loginData: LoginRequestDTO): Promise<any> {
-    return await this.loginService.execute(loginData);
+  async handle(@Body() loginData: LoginRequestDTO, @Res() res: FastifyReply): Promise<any> {
+    const response = await this.loginService.execute(loginData);
+    res.header(HEADERS.ACCESS_TOKEN, `Bearer ${response.accessToken}`);
+    res.header(HEADERS.REFRESH_TOKEN, `Bearer ${response.refreshToken}`);
+    return res.send();
   }
 }

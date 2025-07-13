@@ -6,16 +6,16 @@ import env from '@config/env';
 import { LoginController } from './contexts/login/login.controller';
 import { LoginService } from './contexts/login/login.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { LocalStrategy } from './strategies/local.strategy';
+import { UserRepository } from '@shared/repositories/user.repository';
 
 @Module({
   imports: [
     JwtModule.register({
-      secret: env().application.jwt.secrect,
+      secret: env().application.jwt.secret,
       signOptions: { expiresIn: env().application.jwt.expiration },
     }),
   ],
   controllers: [LoginController],
-  providers: [LoginService, LocalStrategy, JwtStrategy],
+  providers: [LoginService, UserRepository, JwtStrategy],
 })
 export class AuthModule { }

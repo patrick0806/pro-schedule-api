@@ -4,7 +4,7 @@ export default () => ({
     port: process.env.PORT || 3000,
     nodeEnv: process.env.NODE_ENV || 'development',
     jwt: {
-      secrect: process.env.JWT_SECRET || 'secret',
+      secret: process.env.JWT_SECRET || 'secret',
       expiration: process.env.JWT_EXPIRATION || '1d',
       refreshSecret: process.env.JWT_REFRESH_SECRET || 'secret',
       refreshExpiration: process.env.JWT_REFRESH_EXPIRATION || '7d',

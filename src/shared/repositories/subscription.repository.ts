@@ -27,6 +27,19 @@ export class SubscriptionRepository {
         })
     }
 
+    async findByBusinessId(businessId: string): Promise<Subscription> {
+        return this.repository.findOne({
+            where: {
+                business: {
+                    id: businessId,
+                }
+            },
+            relations: {
+                plan: true,
+            }
+        })
+    }
+
     async list(page: number, size: number): Promise<IPageResponse<Subscription>> {
         const [results, totalResults] = await this.repository.findAndCount({
             skip: (page - 1) * size,
