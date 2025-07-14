@@ -44,4 +44,14 @@ export class ServiceRepository {
     async deleteById(id: string): Promise<void> {
         await this.repository.delete(id);
     }
+
+    async countServicesByBusiness(businessId: string): Promise<number> {
+        return this.repository.count({
+            where: {
+                business: {
+                    id: businessId,
+                }
+            }
+        })
+    }
 }

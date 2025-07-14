@@ -12,6 +12,7 @@ import { FindServiceController } from './contexts/find/find.controller';
 import { FindServiceService } from './contexts/find/find.service';
 import { ListServicesController } from './contexts/list/list.controller';
 import { ListServicesService } from './contexts/list/list.service';
+import { PlanRepository } from '@shared/repositories/plan.repository';
 
 @Module({
   controllers: [
@@ -28,6 +29,7 @@ import { ListServicesService } from './contexts/list/list.service';
     FindServiceService,
     ListServicesService,
     ServiceRepository,
+    PlanRepository,
   ],
 })
-export class ServiceModule {}
+export class ServiceModule { }
