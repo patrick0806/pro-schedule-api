@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 
+import { PlanRepository } from '@shared/repositories/plan.repository';
 import { ServiceRepository } from '@shared/repositories/service.repository';
 
 import { CreateServiceController } from './contexts/create/create.controller';
@@ -12,7 +13,6 @@ import { FindServiceController } from './contexts/find/find.controller';
 import { FindServiceService } from './contexts/find/find.service';
 import { ListServicesController } from './contexts/list/list.controller';
 import { ListServicesService } from './contexts/list/list.service';
-import { PlanRepository } from '@shared/repositories/plan.repository';
 
 @Module({
   controllers: [
@@ -32,4 +32,4 @@ import { PlanRepository } from '@shared/repositories/plan.repository';
     PlanRepository,
   ],
 })
-export class ServiceModule { }
+export class ServiceModule {}

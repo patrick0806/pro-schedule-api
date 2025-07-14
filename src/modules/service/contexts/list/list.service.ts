@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
-import { ServiceRepository } from '@shared/repositories/service.repository';
-
 import { PageDTO } from '@shared/dtos/page.dto';
 import { ServiceDTO } from '@shared/dtos/service.dto';
+import { ServiceRepository } from '@shared/repositories/service.repository';
 
 @Injectable()
 export class ListServicesService {
-  constructor(private serviceRepository: ServiceRepository) { }
+  constructor(private serviceRepository: ServiceRepository) {}
 
   async execute(page: number, size: number): Promise<PageDTO<ServiceDTO>> {
-    const { content, ...pageInfo } = await this.serviceRepository.list(page, size);
+    const { content, ...pageInfo } = await this.serviceRepository.list(
+      page,
+      size,
+    );
 
     return {
       ...pageInfo,

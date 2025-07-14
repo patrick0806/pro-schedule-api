@@ -4,7 +4,7 @@ import { ServiceRepository } from '@shared/repositories/service.repository';
 
 @Injectable()
 export class DeleteServiceService {
-  constructor(private serviceRepository: ServiceRepository) { }
+  constructor(private serviceRepository: ServiceRepository) {}
 
   async execute(id: string): Promise<void> {
     const service = await this.serviceRepository.findById(id);

@@ -3,6 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import env from '@config/env';
+
 import { IAccessToken } from '@shared/interfaces/tokens.interface';
 
 @Injectable()

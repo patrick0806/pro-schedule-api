@@ -10,7 +10,7 @@ import { EditServiceService } from './edit.service';
 @ApiTags(API_TAGS.SERVICE)
 @Controller({ version: '1' })
 export class EditServiceController {
-  constructor(private readonly editServiceService: EditServiceService) { }
+  constructor(private readonly editServiceService: EditServiceService) {}
 
   @ApiOperation({ summary: 'Edit a service' })
   @Put(':id')

@@ -9,7 +9,7 @@ import { DeleteServiceService } from './delete.service';
 @ApiTags(API_TAGS.SERVICE)
 @Controller({ version: '1' })
 export class DeleteServiceController {
-  constructor(private readonly deleteServiceService: DeleteServiceService) { }
+  constructor(private readonly deleteServiceService: DeleteServiceService) {}
 
   @ApiOperation({ summary: 'Delete a service' })
   @Delete(':id')
