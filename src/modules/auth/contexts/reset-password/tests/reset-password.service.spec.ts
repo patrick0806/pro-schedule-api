@@ -1,10 +1,11 @@
+import { UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { UnauthorizedException } from '@nestjs/common';
 
-import { ResetPasswordService } from '../reset-password.service';
 import { PasswordResetRepository } from '@shared/repositories/password-reset.repository';
 import { UserRepository } from '@shared/repositories/user.repository';
+
+import { ResetPasswordService } from '../reset-password.service';
 
 vi.mock('bcrypt', () => ({
   compare: vi.fn(),

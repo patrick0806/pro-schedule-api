@@ -1,11 +1,10 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateInitialTables1752368119968 implements MigrationInterface {
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
-
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "plans" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "name" text NOT NULL,
@@ -19,7 +18,7 @@ export class CreateInitialTables1752368119968 implements MigrationInterface {
             )
         `);
 
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "business" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "name" text NOT NULL,
@@ -31,7 +30,7 @@ export class CreateInitialTables1752368119968 implements MigrationInterface {
             )
         `);
 
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "users" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "name" text NOT NULL,
@@ -45,7 +44,7 @@ export class CreateInitialTables1752368119968 implements MigrationInterface {
             )
         `);
 
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "subscriptions" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "status" text NOT NULL,
@@ -58,7 +57,7 @@ export class CreateInitialTables1752368119968 implements MigrationInterface {
             )
         `);
 
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "services" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "name" text NOT NULL,
@@ -71,7 +70,7 @@ export class CreateInitialTables1752368119968 implements MigrationInterface {
             )
         `);
 
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "business_settings" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "workingDays" jsonb DEFAULT '{}',
@@ -89,7 +88,7 @@ export class CreateInitialTables1752368119968 implements MigrationInterface {
             )
         `);
 
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "business_closures" (
                 "id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
                 "start" TIMESTAMP NOT NULL,
@@ -99,16 +98,15 @@ export class CreateInitialTables1752368119968 implements MigrationInterface {
                 "businessId" uuid REFERENCES business(id)
             )
         `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`DROP TABLE "business_closures"`);
-        await queryRunner.query(`DROP TABLE "business_settings"`);
-        await queryRunner.query(`DROP TABLE "services"`);
-        await queryRunner.query(`DROP TABLE "subscriptions"`);
-        await queryRunner.query(`DROP TABLE "users"`);
-        await queryRunner.query(`DROP TABLE "business"`);
-        await queryRunner.query(`DROP TABLE "plans"`);
-    }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP TABLE "business_closures"`);
+    await queryRunner.query(`DROP TABLE "business_settings"`);
+    await queryRunner.query(`DROP TABLE "services"`);
+    await queryRunner.query(`DROP TABLE "subscriptions"`);
+    await queryRunner.query(`DROP TABLE "users"`);
+    await queryRunner.query(`DROP TABLE "business"`);
+    await queryRunner.query(`DROP TABLE "plans"`);
+  }
 }

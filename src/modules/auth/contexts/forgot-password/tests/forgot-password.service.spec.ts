@@ -1,12 +1,12 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { NotFoundException } from '@nestjs/common';
 
+import { EmailService } from '@shared/providers';
+import { PasswordResetRepository } from '@shared/repositories/password-reset.repository';
+import { UserRepository } from '@shared/repositories/user.repository';
 
 import { ForgotPasswordService } from '../forgot-password.service';
-import { UserRepository } from '@shared/repositories/user.repository';
-import { PasswordResetRepository } from '@shared/repositories/password-reset.repository';
-import { EmailService } from '@shared/providers';
 
 vi.mock('bcrypt', () => ({
   hash: vi.fn().mockResolvedValue('hashed-token'),

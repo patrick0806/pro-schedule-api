@@ -35,7 +35,7 @@ export class LogBuilderService {
   }
 
   public build(params: ILogParams) {
-    const log: ILogData = { ...params } //TODO - add logic to calculate duration;
+    const log: ILogData = { ...params }; //TODO - add logic to calculate duration;
 
     this.logger.log(log.level, JSON.stringify(log, null, 2));
   }

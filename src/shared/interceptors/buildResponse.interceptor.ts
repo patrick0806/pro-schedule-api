@@ -24,17 +24,15 @@ export class BuildResponseInterceptor implements NestInterceptor {
         const request = context.switchToHttp().getRequest<FastifyRequest>();
 
         if (!request.url.includes('health')) {
-          this.logger.build(
-            {
-              ...params,
-              level: 'info',
-              timestamp: new Date().toISOString(),
-              transactionId: getHeader(request.headers, HEADERS.TRANSACTION_ID),
-              path: request.url,
-              method: request.method,
-              statusCode: 200,
-            },
-          );
+          this.logger.build({
+            ...params,
+            level: 'info',
+            timestamp: new Date().toISOString(),
+            transactionId: getHeader(request.headers, HEADERS.TRANSACTION_ID),
+            path: request.url,
+            method: request.method,
+            statusCode: 200,
+          });
         }
 
         return params?.data || params;

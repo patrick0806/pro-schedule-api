@@ -35,20 +35,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception.message,
     );
 
-    this.logger.build(
-      {
-        code: exception.error,
-        message: exception.message,
-        details: exceptionResponse,
-        level:
-          statusCode === HttpStatus.INTERNAL_SERVER_ERROR ? 'error' : 'warn',
-        timestamp: new Date().toISOString(),
-        method: request.method,
-        path: request.url,
-        statusCode,
-        transactionId,
-      },
-    );
+    this.logger.build({
+      code: exception.error,
+      message: exception.message,
+      details: exceptionResponse,
+      level: statusCode === HttpStatus.INTERNAL_SERVER_ERROR ? 'error' : 'warn',
+      timestamp: new Date().toISOString(),
+      method: request.method,
+      path: request.url,
+      statusCode,
+      transactionId,
+    });
 
     response.code(statusCode).send(exceptionResponse);
   }

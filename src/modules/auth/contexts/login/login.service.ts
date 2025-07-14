@@ -1,24 +1,27 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
+import env from '@config/env';
+
+import { SubscriptionStatus } from '@shared/enums/subscriptionStatus.enum';
+import { SubscriptionRepository } from '@shared/repositories/subscription.repository';
+import { UserRepository } from '@shared/repositories/user.repository';
+import { compareHash } from '@shared/utils/hash.util';
 
 import { LoginRequestDTO } from './dtos/request.dto';
-import { UserRepository } from '@shared/repositories/user.repository';
-import e from 'express';
-import { compareHash } from '@shared/utils/hash.util';
-import { SubscriptionRepository } from '@shared/repositories/subscription.repository';
-import { SubscriptionStatus } from '@shared/enums/subscriptionStatus.enum';
-import { JwtService } from '@nestjs/jwt';
-import env from '@config/env';
-import { IAccessToken } from '@shared/interfaces/tokens.interface';
 
 @Injectable()
 export class LoginService {
   constructor(
     private repository: UserRepository,
     private subscriptionRepository: SubscriptionRepository,
-    private jwtService: JwtService
-  ) { }
+    private jwtService: JwtService,
+  ) {}
 
-  async execute({ email, password }: LoginRequestDTO): Promise<{ accessToken: string, refreshToken: string }> {
+  async execute({
+    email,
+    password,
+  }: LoginRequestDTO): Promise<{ accessToken: string; refreshToken: string }> {
     const user = await this.repository.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException({
@@ -35,7 +38,9 @@ export class LoginService {
       });
     }
 
-    const subscription = await this.subscriptionRepository.findByBusinessId(user.business.id);
+    const subscription = await this.subscriptionRepository.findByBusinessId(
+      user.business.id,
+    );
     const isActive = user.isActive && user.business.isActive;
     if (!isActive) {
       throw new UnauthorizedException({
@@ -44,7 +49,10 @@ export class LoginService {
       });
     }
 
-    if (subscription.status === SubscriptionStatus.EXPIRED || subscription.status === SubscriptionStatus.INACTIVE) {
+    if (
+      subscription.status === SubscriptionStatus.EXPIRED ||
+      subscription.status === SubscriptionStatus.INACTIVE
+    ) {
       throw new UnauthorizedException({
         error: 'Unauthorized',
         message: 'User or business is not active',
@@ -60,8 +68,8 @@ export class LoginService {
       },
       {
         secret: env().application.jwt.secret,
-        expiresIn: env().application.jwt.expiration
-      }
+        expiresIn: env().application.jwt.expiration,
+      },
     );
 
     const refreshToken = this.jwtService.sign(
@@ -71,12 +79,12 @@ export class LoginService {
       {
         secret: env().application.jwt.refreshSecret,
         expiresIn: env().application.jwt.refreshExpiration,
-      }
+      },
     );
 
     return {
       accessToken,
       refreshToken,
-    }
+    };
   }
 }

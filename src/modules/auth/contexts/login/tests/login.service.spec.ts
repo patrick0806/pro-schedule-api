@@ -1,14 +1,14 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { SubscriptionStatus } from '@shared/enums/subscriptionStatus.enum';
+import { SubscriptionRepository } from '@shared/repositories/subscription.repository';
+import { UserRepository } from '@shared/repositories/user.repository';
+import { compareHash } from '@shared/utils/hash.util';
 
 import { LoginService } from '../login.service';
-import { UserRepository } from '@shared/repositories/user.repository';
-import { SubscriptionRepository } from '@shared/repositories/subscription.repository';
-import { SubscriptionStatus } from '@shared/enums/subscriptionStatus.enum';
-import { compareHash } from '@shared/utils/hash.util';
 
 vi.mock('@shared/utils/hash.util');
 vi.mock('@config/env', () => ({
@@ -18,17 +18,16 @@ vi.mock('@config/env', () => ({
         secret: 'test-secret',
         expiration: '1h',
         refreshSecret: 'test-refresh-secret',
-        refreshExpiration: '7d'
-      }
-    }
-  })
+        refreshExpiration: '7d',
+      },
+    },
+  }),
 }));
 
 describe('LoginService', () => {
   let service: LoginService;
   let userRepository: UserRepository;
   let subscriptionRepository: SubscriptionRepository;
-  let jwtService: JwtService;
 
   const mockUser = {
     id: '1',
@@ -37,16 +36,16 @@ describe('LoginService', () => {
     isActive: true,
     business: {
       id: '1',
-      isActive: true
-    }
+      isActive: true,
+    },
   };
 
   const mockSubscription = {
     id: '1',
     status: SubscriptionStatus.ACTIVE,
     plan: {
-      id: '1'
-    }
+      id: '1',
+    },
   };
 
   beforeEach(async () => {
@@ -76,8 +75,9 @@ describe('LoginService', () => {
 
     service = module.get<LoginService>(LoginService);
     userRepository = module.get<UserRepository>(UserRepository);
-    subscriptionRepository = module.get<SubscriptionRepository>(SubscriptionRepository);
-    jwtService = module.get<JwtService>(JwtService);
+    subscriptionRepository = module.get<SubscriptionRepository>(
+      SubscriptionRepository,
+    );
   });
 
   it('should be defined', () => {
@@ -87,88 +87,120 @@ describe('LoginService', () => {
   describe('execute', () => {
     it('should successfully authenticate user and return tokens', async () => {
       vi.mocked(userRepository.findByEmail).mockResolvedValue(mockUser as any);
-      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(mockSubscription as any);
+      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(
+        mockSubscription as any,
+      );
       vi.mocked(compareHash).mockResolvedValue(true);
 
       const result = await service.execute({
         email: 'test@example.com',
-        password: 'password'
+        password: 'password',
       });
 
       expect(result).toEqual({
         accessToken: 'token',
-        refreshToken: 'token'
+        refreshToken: 'token',
       });
     });
 
     it('should throw UnauthorizedException when user is not found', async () => {
       vi.mocked(userRepository.findByEmail).mockResolvedValue(null);
 
-      await expect(service.execute({
-        email: 'nonexistent@example.com',
-        password: 'password'
-      })).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.execute({
+          email: 'nonexistent@example.com',
+          password: 'password',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException when password is invalid', async () => {
       vi.mocked(userRepository.findByEmail).mockResolvedValue(mockUser as any);
       vi.mocked(compareHash).mockResolvedValue(false);
 
-      await expect(service.execute({
-        email: 'test@example.com',
-        password: 'wrongpassword'
-      })).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.execute({
+          email: 'test@example.com',
+          password: 'wrongpassword',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException when user is inactive', async () => {
       const inactiveUser = { ...mockUser, isActive: false };
-      vi.mocked(userRepository.findByEmail).mockResolvedValue(inactiveUser as any);
+      vi.mocked(userRepository.findByEmail).mockResolvedValue(
+        inactiveUser as any,
+      );
       vi.mocked(compareHash).mockResolvedValue(true);
-      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(mockSubscription as any);
+      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(
+        mockSubscription as any,
+      );
 
-      await expect(service.execute({
-        email: 'test@example.com',
-        password: 'password'
-      })).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.execute({
+          email: 'test@example.com',
+          password: 'password',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException when business is inactive', async () => {
       const userWithInactiveBusiness = {
         ...mockUser,
-        business: { ...mockUser.business, isActive: false }
+        business: { ...mockUser.business, isActive: false },
       };
-      vi.mocked(userRepository.findByEmail).mockResolvedValue(userWithInactiveBusiness as any);
+      vi.mocked(userRepository.findByEmail).mockResolvedValue(
+        userWithInactiveBusiness as any,
+      );
       vi.mocked(compareHash).mockResolvedValue(true);
-      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(mockSubscription as any);
+      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(
+        mockSubscription as any,
+      );
 
-      await expect(service.execute({
-        email: 'test@example.com',
-        password: 'password'
-      })).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.execute({
+          email: 'test@example.com',
+          password: 'password',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException when subscription is expired', async () => {
-      const expiredSubscription = { ...mockSubscription, status: SubscriptionStatus.EXPIRED };
+      const expiredSubscription = {
+        ...mockSubscription,
+        status: SubscriptionStatus.EXPIRED,
+      };
       vi.mocked(userRepository.findByEmail).mockResolvedValue(mockUser as any);
       vi.mocked(compareHash).mockResolvedValue(true);
-      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(expiredSubscription as any);
+      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(
+        expiredSubscription as any,
+      );
 
-      await expect(service.execute({
-        email: 'test@example.com',
-        password: 'password'
-      })).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.execute({
+          email: 'test@example.com',
+          password: 'password',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
     });
 
     it('should throw UnauthorizedException when subscription is inactive', async () => {
-      const inactiveSubscription = { ...mockSubscription, status: SubscriptionStatus.INACTIVE };
+      const inactiveSubscription = {
+        ...mockSubscription,
+        status: SubscriptionStatus.INACTIVE,
+      };
       vi.mocked(userRepository.findByEmail).mockResolvedValue(mockUser as any);
       vi.mocked(compareHash).mockResolvedValue(true);
-      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(inactiveSubscription as any);
+      vi.mocked(subscriptionRepository.findByBusinessId).mockResolvedValue(
+        inactiveSubscription as any,
+      );
 
-      await expect(service.execute({
-        email: 'test@example.com',
-        password: 'password'
-      })).rejects.toThrow(UnauthorizedException);
+      await expect(
+        service.execute({
+          email: 'test@example.com',
+          password: 'password',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 });

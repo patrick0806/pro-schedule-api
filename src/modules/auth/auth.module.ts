@@ -3,22 +3,23 @@ import { JwtModule } from '@nestjs/jwt';
 
 import env from '@config/env';
 
-import { LoginController } from './contexts/login/login.controller';
-import { LoginService } from './contexts/login/login.service';
+import { EmailService } from '@shared/providers';
+import { BusinessRepository } from '@shared/repositories/business.repository';
+import { PasswordResetRepository } from '@shared/repositories/password-reset.repository';
+import { SubscriptionRepository } from '@shared/repositories/subscription.repository';
+import { UserRepository } from '@shared/repositories/user.repository';
+
 import { ForgotPasswordController } from './contexts/forgot-password/forgot-password.controller';
 import { ForgotPasswordService } from './contexts/forgot-password/forgot-password.service';
-import { ResetPasswordController } from './contexts/reset-password/reset-password.controller';
-import { ResetPasswordService } from './contexts/reset-password/reset-password.service';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { UserRepository } from '@shared/repositories/user.repository';
-import { PasswordResetRepository } from '@shared/repositories/password-reset.repository';
-import { EmailService } from '@shared/providers';
-import { SignupService } from './contexts/signup/signup.service';
-import { SignupController } from './contexts/signup/signup.controller';
+import { LoginController } from './contexts/login/login.controller';
+import { LoginService } from './contexts/login/login.service';
 import { RefreshTokenController } from './contexts/refreshToken/refreshToken.controller';
 import { RefreshTokenService } from './contexts/refreshToken/refreshToken.service';
-import { BusinessRepository } from '@shared/repositories/business.repository';
-import { SubscriptionRepository } from '@shared/repositories/subscription.repository';
+import { ResetPasswordController } from './contexts/reset-password/reset-password.controller';
+import { ResetPasswordService } from './contexts/reset-password/reset-password.service';
+import { SignupController } from './contexts/signup/signup.controller';
+import { SignupService } from './contexts/signup/signup.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -48,5 +49,4 @@ import { SubscriptionRepository } from '@shared/repositories/subscription.reposi
     ResetPasswordService,
   ],
 })
-export class AuthModule { }
-
+export class AuthModule {}

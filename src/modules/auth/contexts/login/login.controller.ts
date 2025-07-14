@@ -12,11 +12,14 @@ import { LoginService } from './login.service';
 @ApiTags(API_TAGS.AUTH)
 @Controller({ version: '1', path: 'login' })
 export class LoginController {
-  constructor(private readonly loginService: LoginService) { }
+  constructor(private readonly loginService: LoginService) {}
 
   @ApiOperation({ summary: 'Login' })
   @Post()
-  async handle(@Body() loginData: LoginRequestDTO, @Res() res: FastifyReply): Promise<any> {
+  async handle(
+    @Body() loginData: LoginRequestDTO,
+    @Res() res: FastifyReply,
+  ): Promise<any> {
     const response = await this.loginService.execute(loginData);
     res.header(HEADERS.ACCESS_TOKEN, `Bearer ${response.accessToken}`);
     res.header(HEADERS.REFRESH_TOKEN, `Bearer ${response.refreshToken}`);

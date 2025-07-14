@@ -35,19 +35,17 @@ export class ValidationExceptionFilter implements ExceptionFilter {
       [exceptionDeatils],
     );
 
-    this.logger.build(
-      {
-        code: exception.error,
-        message: exception.message,
-        details: exceptionDeatils,
-        level: 'warn',
-        timestamp: new Date().toISOString(),
-        method: request.method,
-        path: request.url,
-        statusCode: HttpStatus.BAD_REQUEST,
-        transactionId,
-      },
-    );
+    this.logger.build({
+      code: exception.error,
+      message: exception.message,
+      details: exceptionDeatils,
+      level: 'warn',
+      timestamp: new Date().toISOString(),
+      method: request.method,
+      path: request.url,
+      statusCode: HttpStatus.BAD_REQUEST,
+      transactionId,
+    });
 
     response.code(HttpStatus.BAD_REQUEST).send(exceptionResponse);
   }

@@ -1,14 +1,15 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { SignupService } from '../signup.service';
-import { UserRepository } from '@shared/repositories/user.repository';
+
+import { SubscriptionStatus } from '@shared/enums/subscriptionStatus.enum';
+import { EmailService } from '@shared/providers';
 import { BusinessRepository } from '@shared/repositories/business.repository';
 import { SubscriptionRepository } from '@shared/repositories/subscription.repository';
-import { EmailService } from '@shared/providers';
+import { UserRepository } from '@shared/repositories/user.repository';
+
 import { SignupRequestDTO } from '../dtos/request.dto';
-import { SubscriptionStatus } from '@shared/enums/subscriptionStatus.enum';
-import { addDays } from 'date-fns';
+import { SignupService } from '../signup.service';
 
 vi.mock('date-fns', () => ({
   addDays: vi.fn(() => new Date('2024-01-15T00:00:00.000Z')),
@@ -76,7 +77,9 @@ describe('SignupService', () => {
     service = module.get<SignupService>(SignupService);
     userRepository = module.get<UserRepository>(UserRepository);
     businessRepository = module.get<BusinessRepository>(BusinessRepository);
-    subscriptionRepository = module.get<SubscriptionRepository>(SubscriptionRepository);
+    subscriptionRepository = module.get<SubscriptionRepository>(
+      SubscriptionRepository,
+    );
     emailService = module.get<EmailService>(EmailService);
   });
 
@@ -91,8 +94,12 @@ describe('SignupService', () => {
 
       await service.execute(mockSignupRequest);
 
-      expect(businessRepository.findByPhoneNumber).toHaveBeenCalledWith(mockSignupRequest.business.whatsapp);
-      expect(userRepository.findByEmail).toHaveBeenCalledWith(mockSignupRequest.user.email);
+      expect(businessRepository.findByPhoneNumber).toHaveBeenCalledWith(
+        mockSignupRequest.business.whatsapp,
+      );
+      expect(userRepository.findByEmail).toHaveBeenCalledWith(
+        mockSignupRequest.user.email,
+      );
       expect(businessRepository.save).toHaveBeenCalledWith({
         ...mockSignupRequest.business,
         whatsapp: '5511999999999',
@@ -119,18 +126,30 @@ describe('SignupService', () => {
     });
 
     it('should throw ConflictException if business phone number already exists', async () => {
-      vi.mocked(businessRepository.findByPhoneNumber).mockResolvedValue(mockSavedBusiness as any);
+      vi.mocked(businessRepository.findByPhoneNumber).mockResolvedValue(
+        mockSavedBusiness as any,
+      );
 
-      await expect(service.execute(mockSignupRequest)).rejects.toThrow(ConflictException);
-      await expect(service.execute(mockSignupRequest)).rejects.toThrow('Already exists a Business with this whatsapp');
+      await expect(service.execute(mockSignupRequest)).rejects.toThrow(
+        ConflictException,
+      );
+      await expect(service.execute(mockSignupRequest)).rejects.toThrow(
+        'Already exists a Business with this whatsapp',
+      );
     });
 
     it('should throw ConflictException if user email already exists', async () => {
       vi.mocked(businessRepository.findByPhoneNumber).mockResolvedValue(null);
-      vi.mocked(userRepository.findByEmail).mockResolvedValue({ id: 'user-id' } as any);
+      vi.mocked(userRepository.findByEmail).mockResolvedValue({
+        id: 'user-id',
+      } as any);
 
-      await expect(service.execute(mockSignupRequest)).rejects.toThrow(ConflictException);
-      await expect(service.execute(mockSignupRequest)).rejects.toThrow('Already exists a User with this email');
+      await expect(service.execute(mockSignupRequest)).rejects.toThrow(
+        ConflictException,
+      );
+      await expect(service.execute(mockSignupRequest)).rejects.toThrow(
+        'Already exists a User with this email',
+      );
     });
   });
 });

@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UserRepository } from '@shared/repositories/user.repository';
-import { ForgotPasswordRequestDTO } from './dtos/request.dto';
-import { PasswordResetRepository } from '@shared/repositories/password-reset.repository';
-import { randomBytes } from 'crypto';
 import { hash } from 'bcrypt';
+import { randomBytes } from 'crypto';
+
 import { EmailService } from '@shared/providers';
+import { PasswordResetRepository } from '@shared/repositories/password-reset.repository';
+import { UserRepository } from '@shared/repositories/user.repository';
+
+import { ForgotPasswordRequestDTO } from './dtos/request.dto';
 
 @Injectable()
 export class ForgotPasswordService {
@@ -28,11 +30,8 @@ export class ForgotPasswordService {
       token: hashedToken,
     });
 
-    await this.emailService.send(
-      email,
-      'Password Reset',
-      'password-reset',
-      { token },
-    );
+    await this.emailService.send(email, 'Password Reset', 'password-reset', {
+      token,
+    });
   }
 }

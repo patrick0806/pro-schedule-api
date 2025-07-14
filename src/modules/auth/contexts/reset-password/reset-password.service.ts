@@ -1,5 +1,4 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { compare } from 'bcrypt';
 import { addMinutes } from 'date-fns';
 
 import { PasswordResetRepository } from '@shared/repositories/password-reset.repository';
@@ -21,7 +20,8 @@ export class ResetPasswordService {
       throw new UnauthorizedException('Invalid token');
     }
 
-    const isTokenExpired = addMinutes(passwordReset.created_at, 30) < new Date();
+    const isTokenExpired =
+      addMinutes(passwordReset.created_at, 30) < new Date();
 
     if (isTokenExpired) {
       throw new UnauthorizedException('Expired token');

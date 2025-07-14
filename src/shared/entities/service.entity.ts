@@ -1,29 +1,41 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Relation, UpdateDateColumn } from "typeorm";
-import { Business } from "./business.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Relation,
+  UpdateDateColumn,
+} from 'typeorm';
+
+import { Business } from './business.entity';
 
 @Entity('services')
 export class Service {
-    @PrimaryGeneratedColumn("uuid")
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column()
-    price: number;
+  @Column()
+  description: string;
 
-    @Column()
-    duration: number;
+  @Column({ type: 'int' })
+  priceInCents: number;
 
-    @Column({ name: 'is_active' })
-    isActive: boolean;
+  @Column({ type: 'int' })
+  durationInMinutes: number;
 
-    @CreateDateColumn({ name: 'created_at' })
-    createdAt: Date;
+  @Column({ default: true })
+  isActive: boolean;
 
-    @UpdateDateColumn({ name: 'updated_at' })
-    updatedAt: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-    @ManyToOne(() => Business, business => business.services)
-    business: Relation<Business>;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @ManyToOne(() => Business, (business) => business.services)
+  business: Relation<Business>;
 }

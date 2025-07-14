@@ -18,6 +18,6 @@ export default () => ({
     password: process.env.DATABASE_PASSWORD || 'postgres',
   },
   mail: {
-    resend: process.env.RESEND_API_KEY || "",
+    resend: process.env.RESEND_API_KEY || '',
   },
 });
