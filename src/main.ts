@@ -47,6 +47,8 @@ async function bootstrap() {
 
   app.enableCors({
     origin: process.env.NODE_ENV === 'production' ? 'https://referer.com' : '*',
+    allowedHeaders: '*',
+    exposedHeaders: '*',
   });
   await app.register(helmet);
 

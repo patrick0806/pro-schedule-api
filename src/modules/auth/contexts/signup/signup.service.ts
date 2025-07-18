@@ -9,6 +9,8 @@ import { SubscriptionRepository } from '@shared/repositories/subscription.reposi
 import { UserRepository } from '@shared/repositories/user.repository';
 
 import { SignupRequestDTO } from './dtos/request.dto';
+import { UserRole } from '@shared/enums/userRole';
+import { generateHash } from '@shared/utils/hash.util';
 
 @Injectable()
 export class SignupService {
@@ -37,11 +39,15 @@ export class SignupService {
     const savedBusiness = await this.businessRepository.save({
       ...business,
       whatsapp: business.whatsapp.replace(/\D/g, ''),
+      isActive: true,
     });
 
     await this.userRepository.save({
       ...user,
+      password: await generateHash(user.password),
       business: savedBusiness,
+      role: UserRole.OWNER,
+      isActive: true,
     });
 
     await this.subscriptionRepository.save({

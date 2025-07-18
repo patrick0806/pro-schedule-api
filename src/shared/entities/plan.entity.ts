@@ -10,7 +10,7 @@ import {
 
 import { Subscription } from './subscription.entity';
 
-@Entity('Plans')
+@Entity('plans')
 export class Plan {
   @PrimaryGeneratedColumn('uuid')
   id: string;

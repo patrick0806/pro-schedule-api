@@ -21,8 +21,8 @@ export class LoginController {
     @Res() res: FastifyReply,
   ): Promise<any> {
     const response = await this.loginService.execute(loginData);
-    res.header(HEADERS.ACCESS_TOKEN, `Bearer ${response.accessToken}`);
-    res.header(HEADERS.REFRESH_TOKEN, `Bearer ${response.refreshToken}`);
+    res.header(HEADERS.ACCESS_TOKEN, `${response.accessToken}`);
+    res.header(HEADERS.REFRESH_TOKEN, `${response.refreshToken}`);
     return res.send();
   }
 }

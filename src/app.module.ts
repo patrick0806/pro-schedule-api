@@ -26,7 +26,7 @@ import { ServiceModule } from '@modules/service/service.module';
         module: AuthModule,
       },
       {
-        path: 'service',
+        path: 'services',
         module: ServiceModule,
       },
     ]),
@@ -43,4 +43,4 @@ import { ServiceModule } from '@modules/service/service.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

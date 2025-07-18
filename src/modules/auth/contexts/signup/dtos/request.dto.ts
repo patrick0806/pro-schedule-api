@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
@@ -10,35 +11,37 @@ import { randomUUID } from 'node:crypto';
 
 class BusinessSignup {
   @IsNotEmpty()
-  @ApiProperty({ name: 'Barber Salon' })
+  @ApiProperty({ example: 'Barber Salon' })
   name: string;
 
   @IsPhoneNumber('BR')
-  @ApiProperty({ name: '11999999999' })
+  @ApiProperty({ example: '11999999999' })
   whatsapp: string;
 }
 
 class UserSignup {
   @IsNotEmpty()
-  @ApiProperty({ name: 'John Doe' })
+  @ApiProperty({ example: 'John Doe' })
   name: string;
 
   @IsEmail()
-  @ApiProperty({ name: 'johndoe@example.com' })
+  @ApiProperty({ example: 'johndoe@example.com' })
   email: string;
 
   @IsNotEmpty()
-  @ApiProperty({ name: '123456' })
+  @ApiProperty({ example: '123456' })
   password: string;
 }
 
 export class SignupRequestDTO {
   @ApiProperty({ type: BusinessSignup })
   @ValidateNested()
+  @Type(() => BusinessSignup)
   business: BusinessSignup;
 
   @ApiProperty({ type: UserSignup })
   @ValidateNested()
+  @Type(() => UserSignup)
   user: UserSignup;
 
   @ApiProperty({ example: randomUUID() })
